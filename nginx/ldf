@@ -40,3 +40,15 @@ server {
             proxy_cache_bypass $arg_nocache $http_pragma;
     }
 }
+
+server {
+        listen 80 ;
+        listen [::]:80 ;
+   
+
+    location /ldf/api {
+             #proxy_set_header Host $host;
+             #proxy_set_header X-Real-IP $remote_addr;
+             proxy_pass http://google.com;
+    }
+}

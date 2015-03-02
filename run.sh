@@ -10,8 +10,9 @@ echo "Starting LDF"
 echo "Starting SPARQL endpoint"
 /usr/local/virtuoso-opensource/bin/virtuoso-t +wait +configfile /home/ldstack/virtuoso.ini;
 
+
+echo "Starting Linked Data Brwsr"
+python /home/ldstack/brwsr/src/run.py 2>> /var/log/brwsr.err 1>> /var/log/brwsr.log &
+
 echo "Starting web server"
 nginx;
-
-
-
