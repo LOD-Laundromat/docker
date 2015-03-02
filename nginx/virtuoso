@@ -1,0 +1,25 @@
+upstream virtuosoInstance {
+  server 127.0.0.1:8890;
+}
+
+
+server {
+    listen 9882  default_server;
+    server_name _;
+    access_log /var/log/nginx/virtuoso_access.log;
+    error_log /var/log/nginx/virtuoso_error.log;
+
+    
+    location / {
+             proxy_pass http://virtuosoInstance$request_uri;
+             proxy_pass_header Server;
+
+             expires 3w;
+
+             proxy_cache fragments-cache;
+             proxy_cache_key "$request_uri";
+             proxy_cache_valid 200 404 60m;
+             proxy_cache_bypass $arg_nocache $http_pragma;
+    }
+   
+}
