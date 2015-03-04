@@ -1,0 +1,5 @@
+{
+  "port": 4400,
+  "sparqlEndpoint": "http://localhost:9880/sparql/query",
+  "yasguiVersion": "1.0.17"
+}
