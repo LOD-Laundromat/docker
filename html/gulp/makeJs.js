@@ -51,7 +51,7 @@ var gulp = require('gulp'),
 //});
 
 gulp.task('browserify', function() {
-    var bundler = browserify({entries: ["./src/entry.js"], debug: true});
+    var bundler = browserify({entries: ["./client/entry.js"], debug: true});
     
     return bundler
       .bundle()
@@ -79,7 +79,7 @@ gulp.task('browserify', function() {
  * Faster, because we don't minify, and include source maps in js file (notice we store it with .min.js extension, so we don't have to change the index.html file for debugging)
  */
 gulp.task('browserifyForDebug', function() {
-	var bundler = browserify({entries: ["./src/entry.js"], debug: true});
+	var bundler = browserify({entries: ["./client/entry.js"], debug: true});
 	
 	return bundler
 		.bundle()

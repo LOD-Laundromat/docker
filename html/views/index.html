@@ -1,0 +1,50 @@
+<%= include('header') %>
+<%= include('menu') %>
+
+ <div class="row">
+   <div class="col-md-12">
+       <h2>Services</h2>
+        <table class="table">
+           <tr>
+               <th>Url</th>
+               <th>Service</th>
+               
+           </tr>
+           <tr>
+             <td><a href="/sparql/query/" target="_blank">/sparql/query/</a></td>
+             <td>Query SPARQL Endpoint</td>
+           </tr>
+           <tr>
+             <td><a href="/ldf/api/" target="_blank">/ldf/api/</a></td>
+             <td>Linked Data Fragment API</td>
+           </tr>
+           <tr>
+             <td><a href="/ldf/query/" target="_blank">/ldf/query/</a></td>
+             <td>SPARQL client for Linked Data Fragment API</td>
+           </tr>
+       </table>
+       
+    <h2>Admin interfaces</h2>
+    <table class="table">
+     <tr>
+         <th>Url</th>
+         <th>Tool</th>
+         
+     </tr>
+     <tr>
+       <td><a href="http://localhost:9881" target="_blank">localhost:9881</a></td>
+       <td>Triple Pattern Fragment API</td>
+     </tr>
+           <tr>
+             <td><a href="http://localhost:9882" target="_blank">localhost:9882</a></td>
+             <td>SPARQL Endpoint</td>
+           </tr>
+           <tr>
+             <td><a href="http://localhost:9883" target="_blank">localhost:9883</a></td>
+             <td>Linked Data Brwsr</td>
+           </tr>
+    </table>
+   </div><!-- col -->
+ </div><!-- row -->
+ 
+<%= include('footer') %>
