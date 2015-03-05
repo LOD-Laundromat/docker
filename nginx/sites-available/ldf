@@ -1,10 +1,10 @@
-proxy_cache_path /home/ldstack/cache/ldf levels=1:2 keys_zone=fragments-cache:100m max_size=50000m inactive=600m;
-proxy_temp_path /home/ldstack/tmp/ldf;
+#proxy_cache_path /home/ldstack/cache/nginx levels=1:2 keys_zone=fragments-cache:100m max_size=50000m inactive=600m;
+#proxy_temp_path /home/ldstack/tmp/nginx;
 
 
-upstream ldf-node {
-  server 127.0.0.1:3000;
-}
+#upstream ldf-node {
+#  server 127.0.0.1:3000;
+#}
 
 
 server {

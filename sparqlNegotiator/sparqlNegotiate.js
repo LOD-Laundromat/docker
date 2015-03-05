@@ -4,20 +4,23 @@ var config = require('./config.json'),
     negotiate = require('express-negotiate'),
     fs = require('fs'),
     httpProxy = require('http-proxy');
-    
+
 var app = express();
 var proxy = httpProxy.createProxyServer({});
-var html = fs.readFileSync('./index.html', "UTF-8");
+var html = fs.readFileSync(__dirname + '/index.html', "UTF-8");
 html = html.replace(/%%VERSION%%/g,config.yasguiVersion);
-html = html.replace(/%%SPARQL_ENDPOINT%%/g,config.sparqlEndpoint);
-app.all('/', function(req, res, next) {
+html = html.replace(/%%SPARQL_ENDPOINT%%/g,config.proxyEndpoint);
+app.all(config.baseUrl || '/', function(req, res, next) {
     req.negotiate({
         'html': function() {
             res.send(html);
         },
         'default': function() {
             // send to endpoint
-            proxy.web(req, res, { target: config.sparqlEndpoint });
+            proxy.web(req, res, { target: config.sparqlEndpoint,
+        forward: function() {
+            return '/sparql/query/';
+        } });
             //req.pipe(request(url)).pipe(res);
             //res.send('<html><body><h1>Hello World</h1></body></html>');
         }

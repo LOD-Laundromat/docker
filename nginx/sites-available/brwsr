@@ -3,7 +3,7 @@ server {
     server_name _;
     access_log /var/log/nginx/brwsr_access.log;
     error_log /var/log/nginx/brswr_error.log;
-
+    
 
     location /socket.io {
         proxy_pass http://127.0.0.1:5000/socket.io;

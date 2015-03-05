@@ -31,6 +31,7 @@ RUN \
     nano \
     htop \
     nginx \
+    nginx-extras \
     nodejs \
     nodejs-legacy \
     npm \
@@ -99,21 +100,11 @@ RUN cd virtuoso && \
 RUN cp /usr/local/virtuoso-opensource/var/lib/virtuoso/db/virtuoso.ini /home/ldstack/virtuoso.ini && \
     sed -i "s#/usr/local/virtuoso-opensource/var/lib/virtuoso/db/#$DATA_DIR/virtuoso/#" /home/ldstack/virtuoso.ini && \
     mkdir /home/ldstack/data/virtuoso;
-COPY nginx/virtuoso /etc/nginx/sites-enabled/virtuoso
-COPY nginx/virtuoso_80 /etc/nginx/80/virtuoso
 EXPOSE $PORT_SPARQL
 #EXPOSE 9882
 
 
 
-#### Nginx
-RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf;
-RUN mkdir /etc/nginx/80;
-COPY nginx/default /etc/nginx/sites-enabled/default
-
-EXPOSE 80
-#EXPOSE 9880
-EXPOSE $PORT_NGINX
 
 #### Triple Pattern Fragments API
 RUN git clone https://github.com/LinkedDataFragments/Server.js.git $LDF_DIR && \
@@ -122,8 +113,7 @@ RUN git clone https://github.com/LinkedDataFragments/Server.js.git $LDF_DIR && \
     npm update;
     
 COPY ldf/config.json $LDF_DIR/config.json
-COPY nginx/ldf /etc/nginx/sites-enabled/ldf
-COPY nginx/ldf_80 /etc/nginx/80/ldf
+#COPY nginx/ldf /etc/nginx/sites-enabled/ldf
 EXPOSE $PORT_LDF
 #EXPOSE 9881
     
@@ -132,24 +122,49 @@ RUN git clone https://github.com/LinkedDataFragments/Browser.js.git $LDF_CLIENT_
     cd $LDF_CLIENT_DIR && \
     npm install && \
     npm run postinstall;
-COPY nginx/ldfClient_80 /etc/nginx/80/ldfClient
     
 #### Brwsr
 RUN git clone https://github.com/Data2Semantics/brwsr.git && \
     cd brwsr && \
     pip install -r requirements.txt;
-COPY nginx/brwsr /etc/nginx/sites-enabled/brwsr
 COPY brwsr/config.py /home/ldstack/brwsr/src/app/config.py
 
-    
+
+
+
+#### SPARQL content negotiator
+COPY sparqlNegotiator /home/ldstack/sparqlNegotiator
+RUN cd /home/ldstack/sparqlNegotiator && \
+    npm update;
+
+
 #### Init admin web page
 COPY html /var/www/html
 
 
+
+#### Nginx
+RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf;
+COPY nginx/sites-available /etc/nginx/sites-available
+COPY nginx/locations80-available /etc/nginx/locations80-available
+RUN cd /etc/nginx && \
+    rm sites-enabled/* && \
+    cd sites-enabled && \
+    ln -s ../sites-available/* . && \
+    cd ../ && \
+    mkdir locations80-enabled && \
+    cd locations80-enabled && \
+    ln -s ../locations80-available/* .;
+EXPOSE 80
+#EXPOSE 9880
+EXPOSE $PORT_NGINX
+
 ##############
 # Post Processing
 ##############
-COPY run.sh /home/ldstack/run.sh
+COPY bin/run.sh /home/ldstack/run.sh
+COPY bin/restartNginx.sh /home/ldstack/restartNginx.sh
+
 
 RUN chown -R ldstack:ldstack /home/ldstack;
 

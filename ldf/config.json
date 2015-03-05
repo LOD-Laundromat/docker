@@ -3,10 +3,10 @@
     "baseURL": "/ldf/api/",
     "datasources": {
         "dataset": {
-            "title": "LOD2Go Dataset",
+            "title": "LOD-to-go Dataset",
             "type": "SparqlDatasource",
             "settings": {
-                "endpoint": "/sparql/query",
+                "endpoint": "http://localhost:8890/sparql/query"
             }
         }
     },

@@ -1,0 +1,3 @@
+location /ldf/query {
+     alias /home/ldstack/ldfClient/query-ui/build;
+}

@@ -15,7 +15,7 @@ echo "Starting Linked Data Brwsr"
 python /home/ldstack/brwsr/src/run.py 2>> /var/log/brwsr.err 1>> /var/log/brwsr.log &
 
 echo "Starting SPARQL endpoint GUI"
-node /home/ldstack/sparqlNegotiator/main.js 2>> /var/log/sparqlNegotiator.err 1>> /var/log/soarqlNegotiator.log &
+/home/ldstack/sparqlNegotiator/sparqlNegotiate.js 2>> /var/log/sparqlNegotiator.err 1>> /var/log/sparqlNegotiator.log &
 
 echo "Starting web server"
 nginx;
