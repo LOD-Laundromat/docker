@@ -1,10 +1,7 @@
-#proxy_cache_path /home/ldstack/cache/nginx levels=1:2 keys_zone=fragments-cache:100m max_size=50000m inactive=600m;
-#proxy_temp_path /home/ldstack/tmp/nginx;
 
-
-#upstream ldf-node {
-#  server 127.0.0.1:3000;
-#}
+upstream ldf-node {
+  server 127.0.0.1:3000;
+}
 
 
 server {
@@ -14,41 +11,29 @@ server {
     error_log /var/log/nginx/ldf_error.log;
 
     if ($request_method !~ ^(GET|HEAD|OPTIONS)$) {
-                return 405;
-        }
+        return 405;
+    }
     location /assets/ {
-             proxy_pass http://ldf-node$request_uri;
-             proxy_pass_header Server;
+         proxy_pass http://ldf-node$request_uri;
+         proxy_pass_header Server;
 
-             expires 3w;
+         expires 3w;
 
-             proxy_cache fragments-cache;
-             proxy_cache_key "$request_uri";
-             proxy_cache_valid 200 404 60m;
-             proxy_cache_bypass $arg_nocache $http_pragma;
+         proxy_cache fragments-cache;
+         proxy_cache_key "$request_uri";
+         proxy_cache_valid 200 404 60m;
+         proxy_cache_bypass $arg_nocache $http_pragma;
     }
     location / {
-            proxy_pass http://ldf-node$request_uri;
-            proxy_set_header Host $http_host;
-            proxy_pass_header Server;
+        proxy_pass http://ldf-node$request_uri;
+        proxy_set_header Host $http_host;
+        proxy_pass_header Server;
 
-            expires 3w;
+        expires 3w;
 
-            proxy_cache fragments-cache;
-            proxy_cache_key "$request_uri$http_accept";
-            proxy_cache_valid 200 404 60m;
-            proxy_cache_bypass $arg_nocache $http_pragma;
-    }
-}
-
-server {
-        listen 80 ;
-        listen [::]:80 ;
-   
-
-    location /ldf/api {
-             #proxy_set_header Host $host;
-             #proxy_set_header X-Real-IP $remote_addr;
-             proxy_pass http://google.com;
+        proxy_cache fragments-cache;
+        proxy_cache_key "$request_uri$http_accept";
+        proxy_cache_valid 200 404 60m;
+        proxy_cache_bypass $arg_nocache $http_pragma;
     }
 }

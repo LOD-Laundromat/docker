@@ -27,8 +27,11 @@ RUN \
    apt-get update && \
    apt-get install -y \
     wget \
+    curl \
     git \
     nano \
+    emacs \
+    screen \
     htop \
     nginx \
     nginx-extras \
@@ -135,11 +138,14 @@ COPY brwsr/config.py /home/ldstack/brwsr/src/app/config.py
 #### SPARQL content negotiator
 COPY sparqlNegotiator /home/ldstack/sparqlNegotiator
 RUN cd /home/ldstack/sparqlNegotiator && \
-    npm update;
+    npm install;
 
 
-#### Init admin web page
-COPY html /var/www/html
+#### Init interface
+COPY interface /home/ldstack/interface
+RUN cd /home/ldstack/interface && \
+    npm install;
+
 
 
 
@@ -162,14 +168,13 @@ EXPOSE $PORT_NGINX
 ##############
 # Post Processing
 ##############
-COPY bin/run.sh /home/ldstack/run.sh
-COPY bin/restartNginx.sh /home/ldstack/restartNginx.sh
 
-
+RUN mkdir /home/ldstack/bin && echo "export PATH=/home/ldstack/bin:\$PATH" >> /home/ldstack/.bashrc && echo "export PATH=/home/ldstack/bin:\$PATH" >> /root/.bashrc
+COPY bin /home/ldstack/bin
 RUN chown -R ldstack:ldstack /home/ldstack;
 
 
-CMD ["./run.sh"]
+CMD ["./bin/run"]
 
 
 
