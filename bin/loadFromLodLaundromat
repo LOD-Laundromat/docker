@@ -10,7 +10,7 @@ lodlaundromatUrl="http://download.lodlaundromat.org/"
 
 #set flags to follow redirects if there are any
 downloadDir="/home/ldstack/data/downloads"
-curl -o $downloadDir -O -J -L $lodlaundromatUrl/$1
+cd $downloadDir && curl  -O -J -L $lodlaundromatUrl/$1
 
 #add dir to table
 virtuosoAddDir  $downloadDir

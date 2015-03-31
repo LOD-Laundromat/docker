@@ -28,13 +28,22 @@ app.set('view engine', 'html');
 
 app.use('/dist', express.static(__dirname + '/dist'));
 
-app.get('/', function (req, res) {
-    res.render('index');
-})
-app.get('/services', function (req, res) {
+app.use('/services/doc/add/', require('./server/addDoc'));
+app.use('/services/doc/status/', require('./server/docStatus'));
+app.use('/services', function (req, res) {
+    console.log('services');
     res.render('index', { title: 'Hey', message: 'Hello there!'});
 })
+
 app.use(config.sparql.baseUrl, require('./server/sparqlNegotiate'))
+
+
+
+app.get('/', function (req, res) {
+    console.log('main route');
+    res.render('index');
+})
+
 
 var server = app.listen(config.port, function () {
   console.log('Main interface listening at http://localhost:%s', config.port)

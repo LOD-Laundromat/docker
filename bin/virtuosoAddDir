@@ -12,7 +12,7 @@ for dir in "$@"; do
 	graphname="http://$basename"
 	
 	echo "Adding $dir to load list"
-	echo "ld_dir('$absDir','*.nt','$graphname');" > $isqlFile;
+	echo "ld_dir('$absDir','*','$graphname');" > $isqlFile;
 	echo "EXIT;" >> $isqlFile;
 	echo "" >> $isqlFile;
 	cat $isqlFile | isql;
