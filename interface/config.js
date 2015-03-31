@@ -6,7 +6,8 @@ module.exports = {
         baseUrl: "/sparql/query"
 	},
 	bash: {
-	    addMd5: "loadFromLodLaundromat"
+	    addMd5: "loadFromLodLaundromat",
+	    checkDocStatus: "virtuosoCheckStatus",
 	    
 	}
 }

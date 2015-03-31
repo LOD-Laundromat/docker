@@ -1,22 +1,18 @@
-#!/bin/bash
-if [ -z "$1" ];then
-        echo "provide md5 as argument"
-        exit
-fi
+#!/bin/bash                                                                                                                                                                                                  
+
+[ -z "$1" ] && echo "No md5 provided as argument" && exit 1;
 
 
 
 lodlaundromatUrl="http://download.lodlaundromat.org/"
 
-#set flags to follow redirects if there are any
-downloadDir="/home/ldstack/data/downloads"
-cd $downloadDir && curl  -O -J -L $lodlaundromatUrl/$1
+#set flags to follow redirects if there are any                                                                                                                                                              
+downloadDir="/home/ldstack/data/downloads/$1"
+mkdir $downloadDir;
+cd $downloadDir && curl -s -O -J -L $lodlaundromatUrl/$1
 
-#add dir to table
+#add dir to table                                                                                                                                                                                            
 virtuosoAddDir  $downloadDir
 
-#load data into virtuoso, and apply checkpoint for persistency
-virtuosoLoadAndCheckpoint &
-
-
-
+#load data into virtuoso, and apply checkpoint for persistency                                                                                                                                               
+virtuosoLoadSync &
