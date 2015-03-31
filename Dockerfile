@@ -127,8 +127,9 @@ RUN git clone https://github.com/LinkedDataFragments/Browser.js.git $LDF_CLIENT_
     npm run postinstall;
     
 #### Brwsr
-RUN git clone https://github.com/Data2Semantics/brwsr.git && \
-    cd brwsr && \
+RUN git clone https://github.com/LaurensRietveld/brwsr.git && \
+    cd brwsr &&   \
+    git checkout dev && \
     pip install -r requirements.txt;
 COPY brwsr/config.py /home/ldstack/brwsr/src/app/config.py
 
@@ -165,11 +166,22 @@ EXPOSE 80
 #EXPOSE 9880
 EXPOSE $PORT_NGINX
 
+
+
+
+
+
+##############
+# place somewhere else later
+##############
+RUN mkdir $DATA_DIR/downloads;
+
+
 ##############
 # Post Processing
 ##############
 
-RUN mkdir /home/ldstack/bin && echo "export PATH=/home/ldstack/bin:\$PATH" >> /home/ldstack/.bashrc && echo "export PATH=/home/ldstack/bin:\$PATH" >> /root/.bashrc
+RUN mkdir /home/ldstack/bin && echo "export PATH=/usr/local/virtuoso-opensource/bin:/home/ldstack/bin:\$PATH" >> /home/ldstack/.bashrc && echo "export PATH=/usr/local/virtuoso-opensource/bin:/home/ldstack/bin:\$PATH" >> /root/.bashrc
 COPY bin /home/ldstack/bin
 RUN chown -R ldstack:ldstack /home/ldstack;
 

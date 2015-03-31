@@ -1,0 +1,8 @@
+#!/bin/bash
+isqlFile="${HOME}/.isqlCmdFile.sql"
+	     echo "Running loader"
+       echo "rdf_loader_run();&" > $isqlFile;
+        echo "EXIT;" >> $isqlFile;
+        echo "" >> $isqlFile;
+        cat $isqlFile | isql;
+

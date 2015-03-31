@@ -9,7 +9,7 @@ SPARQL_ENDPOINT = "http://dbpedia.org/sparql"
 # the DEFAULT_BASE is *always* prepended to this local name to make up the URI that's used to 
 # query the triple store
 # e.g. "http://dbpedia.org" (without the last slash!)
-DEFAULT_BASE = "http://dbpedia.org"
+DEFAULT_BASE = ""
 
 # The LOCAL_DOCUMENT_INFIX is the infix used between the DEFAULT_BASE and the local name of the URI 
 # to denote the HTML representation of the RDF resource (see the Cool URI's specification)
@@ -20,9 +20,36 @@ LOCAL_DOCUMENT_INFIX = ''
 # e.g. "http://localhost:5000" if running flask.
 LOCAL_SERVER_NAME = "http://localhost:9883"
 
+
+# By default brwsr assumes it is running at the root of the server, 
+# If you want to run brwsr under a directory (e.g. http://example.com/brwsr rather than http://example.com), you need to do this
+# via a reverse proxy, and tell brwsr about it (set BEHIND_PROXY to True)
+#
+#########
+# Example Nginx configuration (adapted from http://flask.pocoo.org/snippets/35/)
+#########
+#
+# location /myprefix {
+#        proxy_pass http://localhost:5000;
+#        proxy_set_header Host $host;
+#        proxy_set_header Upgrade $http_upgrade;
+#        proxy_set_header Connection "upgrade";
+#        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#        proxy_set_header X-Scheme $scheme;
+#        proxy_set_header X-Script-Name /myprefix;
+#        }
+#
+# Where 'myprefix' should be set to the location you want to be running brwsr under
+# The 'proxy_pass' setting should point to the address and port you are running brwsr at (default is localhost port 5000).
+#
+#########
+BEHIND_PROXY = True
+
+
+
 # The START_LOCAL_NAME is the local name of the first URI shown in brwsr if no URI is specified
 # e.g. "resource/Amsterdam" when using the DBPedia settings
-START_LOCAL_NAME = "resource/Amsterdam"
+START_LOCAL_NAME = ""
 
 # The START_URI is simply the combination of the DEFAULT_BASE and the START_LOCAL_NAME
 # (i.e. there is no need to change this, usually)
@@ -31,4 +58,12 @@ START_URI = urljoin(DEFAULT_BASE,START_LOCAL_NAME)
 
 # Set query results limit because otherwise your browser might crash.
 QUERY_RESULTS_LIMIT = 1000
+
+
+# The port via which to run brwsr
+PORT = 9883
+
+# Debug logging
+DEBUG = False
+
 
