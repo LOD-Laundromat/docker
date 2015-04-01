@@ -4174,3 +4174,15 @@ button.close {
 
 .header {
   padding-bottom: 10px; }
+
+#wardrobe {
+  display: none; }
+
+#documentToAdd {
+  margin-bottom: 5px; }
+
+iframe {
+  border-style: none;
+  width: 100%;
+  height: 120px;
+  margin: 10px; }

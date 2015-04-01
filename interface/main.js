@@ -36,7 +36,7 @@ require('lodash-express')(app, 'html');
 app.set('view engine', 'html');
 
 app.use('/dist', express.static(__dirname + '/dist'));
-
+app.use('/fonts', express.static(__dirname + '/node_modules/bootstrap-sass/assets/fonts'))
 app.use('/services/doc/add/', require('./server/addDoc'));
 app.use('/services/doc/status/', require('./server/docStatus'));
 app.use('/services', function (req, res) {

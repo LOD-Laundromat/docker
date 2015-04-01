@@ -8,6 +8,5 @@ module.exports = {
 	bash: {
 	    addMd5: "loadFromLodLaundromat",
 	    checkDocStatus: "virtuosoCheckStatus",
-	    
 	}
 }
