@@ -1,12 +1,13 @@
 <%= include('header') %>
 <%= include('menu') %>
-
 <div class="row">
     <div class="col-md-12">
         <h2>Add your data</h2>
         <button id="addDoc" class="btn btn-default">Add doc</button>
         <input id="documentToAdd" class="form-control" type="text">
+        <iframe id="wardrobe" style="overflow:hidden; width: 100%">
         
+        </iframe>
         
     </div>
 
@@ -62,5 +63,8 @@
     </table>
    </div><!-- col -->
  </div><!-- row -->
- 
+
 <%= include('footer') %>
+ <script type="text/javascript">
+ lod2go.mainPage();
+ </script>

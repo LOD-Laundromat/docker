@@ -1,5 +1,5 @@
 module.exports =  {
-	style: ['src/scss/*'],
+	style: ['client/scss/*'],
 	bundleDir: "dist",
 	bundleName: "ldstack",
 };
