@@ -1,4 +1,5 @@
-var $ = jQuery = require("jquery");
+var $ = jQuery = require("jquery"),
+    _ = require('lodash');
 
 
 //load bootstrap as well
@@ -36,7 +37,7 @@ var showIframe = function() {
 //    http://localhost:9880/services/doc/add/8c4b544fd011889a8273ea5b70c55377
     $('#wardrobe').show().attr('src', "http://lodlaundromat.org/wardrobe/#select");
 };
-var eventsForDatasetAdd = function() {
+var docAdd = function() {
   $('#addDoc').click(function() {
       var doc = $('#documentToAdd').val();
       var md5 = doc.split('/').pop();
@@ -57,9 +58,53 @@ var eventsForDatasetAdd = function() {
     
     $('#searchWardrobe').click(showIframe);
 };
+
+var drawDocOverviewTable = function() {
+    $table = $("#docData").empty();
+    
+    if ($table.length == 0) return;
+    $table.append($('<tr>')
+            .append($('<th>').text('Graph'))
+            .append($('<th>').text('Dataset Info'))
+            .append($('<th>').text('Status'))
+        );
+    $.ajax({
+        url: '/services/doc/status/',
+    }).done(function(data) {
+        
+        _.forEach(data, function(status) {
+            var $row = $('<tr>');
+            
+            var row = [];
+            if (status.graph) row[0] = status.graph;
+            if (status.graph) row[1] = status.graph;
+            if (status.status) row[2] = status.status;
+            
+            _.forEach(row, function(col) {
+                $row.append($('<td>').text(col))
+            })
+            $table.append($row);
+            
+        });
+        $('#docTableMsg').empty().append(getAlert({type:'success', text: 'Added!'}));
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        $("#docData").empty();
+        var errorTxt = "<strong>Error!</strong> ";
+        if (jqXHR.responseText) errorTxt += jqXHR.responseText;
+        $('#docTableMsg').empty().append(getAlert({html:errorTxt}));
+    })
+}
+var docOverview = function() {
+    $('#refreshDocTable').click(drawDocOverviewTable);
+    $(document).ready(function() {
+        drawDocOverviewTable(); 
+    });
+    
+};
 module.exports = {
     mainPage: function() {
-        eventsForDatasetAdd();
+        docAdd();
+        docOverview();
     },
     $ : $
 };

@@ -12,6 +12,7 @@ module.exports = function (req, res) {
       } else if (error) {
           return res.status(500).send(error);
       } else {
+          $('#refreshDocTable').click();
           return res.send('success');
       }
     });
