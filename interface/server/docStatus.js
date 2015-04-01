@@ -5,7 +5,7 @@ _ = require('lodash'),
 
 module.exports = function (req, res) {
     var md5 = util.urlToMd5(req.url);
-    if (!md5) return res.status(400).send('Invalid request. Append md5 to url');
+    
     var exec = require('child_process').exec;
     var child = exec("echo 'select ll_graph, ll_state from DB.DBA.load_list;' | isql", function (error, stdout, stderr) {
       if (stderr){
@@ -13,29 +13,64 @@ module.exports = function (req, res) {
       } else if (error) {
           return res.status(500).send(error);
       } else {
-          var returned = {status: "notFound"};
-          _.forEach(stdout.split("\n"), function(line) {
-              if (line.indexOf(md5) >= 0) {
-                  var matches = line.match(/(\d)$/);
-                  if (matches.length) {
-                      var virtStatus = +matches[0];
-                      var status = "unknown";
-                      if (virtStatus === 0) {
-                          status = "notLoaded";
-                      } else if (virtStatus === 1) {
-                          status = "loading";
-                      } else if (virtStatus === 2) {
-                          status = "loaded";
-                      }
-                      returned = {
-                          virtuosoStatus: virtStatus
-                      }
-
-                  }
-                  return false;//stop loop, i.e. take first result                                                                                                                                           
-              }
-          });
-          return res.send(returned);
+          return res.send(getStatusFromIsql(stdout, md5));
       }
     });
 };
+var isqlRegex = /^([^ ]*).*(\d)$/;
+
+var getStatusFromIsql = function(result, md5) {
+    var getStatusFromLine = function(line) {
+        var statusObj = null;
+        var matches = line.match(isqlRegex);
+        if (matches && matches.length >= 2) {
+            var virtStatus = +matches[2];
+            var graph = matches[1];
+            var statusLabel = "unknown";
+            if (virtStatus === 0) {
+                statusLabel = "notLoaded";
+            } else if (virtStatus === 1) {
+                statusLabel = "loading";
+            } else if (virtStatus === 2) {
+                statusLabel = "loaded";
+            }
+            statusObj = {
+                graph: matches[1],
+                status: statusLabel,
+                virtuosoStatus: virtStatus
+            };
+
+        }
+        return statusObj;
+    };
+    
+    var status;
+    if (md5) {
+       status = {status: "notFound"};
+    } else {
+        //just get status of all docs
+        status = [];
+    }
+    
+    var skip  = true;
+    _.forEach(result.split("\n"), function(line) {
+        if (line.indexOf('___') == 0) {
+            skip = false;
+            return;
+        }
+        if (skip) return;
+        if (line.trim().length == 0) return;
+        if (md5 && line.indexOf(md5) >= 0) {
+            var statusObj = getStatusFromLine(line);
+            if (statusObj) status = statusObj;
+            return false;//stop loop, i.e. take first matching result                                                                                                                                           
+        }
+        if (!md5) {
+            var statusObj = getStatusFromLine(line);
+            if (statusObj) status.push(statusObj);
+        }
+    });
+    return status
+    
+    
+}

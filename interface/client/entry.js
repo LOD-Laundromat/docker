@@ -64,21 +64,3 @@ module.exports = {
     $ : $
 };
 
-
-//var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-//var eventer = window[eventMethod];
-//var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
-//
-//// Listen to message from child window
-//eventer(messageEvent,function(e) {
-//    var key = e.message ? "message" : "data";
-//    var data = e[key];
-//    console.log(key, data);
-//},false);
-//console.log('bla');
-//
-//
-//$(document).ready(function() {
-//    console.log('ready');
-//    $('#wardrobe').attr('src', "http://ll/wardrobe/#select" );
-//})
